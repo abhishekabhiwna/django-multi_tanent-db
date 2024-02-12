@@ -1,0 +1,69 @@
+version: "3.9"
+
+services:
+  app:
+    build:
+      context: .
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/app
+    command: >
+     sh -c  " python manage.py runserver 0.0.0.0:8000"
+    environment:
+      - DB1_HOST=db1
+      - DB2_HOST=db2
+      - DB3_HOST=db3
+      - DB_USER=habib
+      - DB_PASSWORD=habib
+      - DB_NAME=habib
+    depends_on:
+      - db1
+      - db2
+      - db3
+
+  db1:
+    image: postgres:13-alpine
+    volumes:
+      - dev-db-data1:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=habib
+      - POSTGRES_PASSWORD=habib
+      - POSTGRES_DB=habib
+    ports:
+      - "5432:5432"
+
+  db2:
+    image: postgres:13-alpine
+    volumes:
+      - dev-db-data2:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=habib
+      - POSTGRES_PASSWORD=habib
+      - POSTGRES_DB=habib_2
+    ports:
+      - "5433:5432"
+
+  db3:
+    image: postgres:13-alpine
+    volumes:
+      - dev-db-data3:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=habib
+      - POSTGRES_PASSWORD=habib
+      - POSTGRES_DB=habib_3
+    ports:
+        - "5434:5432"
+
+  pgadmin:
+      image: dpage/pgadmin4
+      environment:
+        - PGADMIN_DEFAULT_EMAIL=ahmed7abib007@gmail.com
+        - PGADMIN_DEFAULT_PASSWORD=habib
+      ports:
+        - "5050:80"
+
+volumes:
+  dev-db-data1:
+  dev-db-data2:
+  dev-db-data3:
